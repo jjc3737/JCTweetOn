@@ -35,11 +35,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         @Bind(R.id.ivUserThumbnail)
         ImageView image;
         @Bind(R.id.tvUserName)
-        TextView screenName;
+        TextView name;
         @Bind(R.id.tvTweet)
         TextView body;
         @Bind(R.id.tvTimeStamp)
         TextView timeStamp;
+        @Bind(R.id.tvScreenName)
+        TextView screenName;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -76,7 +78,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         Tweet tweet = mTweets.get(position);
 
         String thumbnail = tweet.getUser().getProfileImageUrl();
-        String screenName = tweet.getUser().getScreenName();
+        String name = tweet.getUser().getName();
+        String screenName = "@" + tweet.getUser().getScreenName();
         String body = tweet.getBody();
         String timeStamp = Utils.getTimeStamp(tweet.getCreatedAt());
 
@@ -85,6 +88,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         iv.setImageResource(0);
         Picasso.with(context).load(thumbnail).fit().into(iv);
 
+        holder.name.setText(name);
         holder.screenName.setText(screenName);
         holder.body.setText(body);
         holder.timeStamp.setText(timeStamp);

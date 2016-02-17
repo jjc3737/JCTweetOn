@@ -17,15 +17,26 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvUserName"
         android:layout_toRightOf="@+id/ivUserThumbnail"
-        android:layout_alignTop="@+id/ivUserThumbnail"/>
+        android:layout_alignTop="@+id/ivUserThumbnail"
+        android:text="Name"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvScreenName"
+        android:layout_toRightOf="@+id/tvUserName"
+        android:layout_marginLeft="10dp"
+        android:layout_alignTop="@+id/tvUserName"
+        android:text="Screenname"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvTimeStamp"
-        android:layout_toRightOf="@+id/tvUserName"
+        android:layout_toRightOf="@+id/tvScreenName"
         android:gravity="right"
         android:text="test"
+        android:layout_alignTop="@+id/tvScreenName"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_alignParentRight="true"

@@ -1,14 +1,18 @@
 package com.codepath.apps.tweeton.Activities;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
 import com.codepath.apps.tweeton.Adapters.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.tweeton.Adapters.TweetsAdapter;
+import com.codepath.apps.tweeton.Fragments.ComposeTweetFragment;
 import com.codepath.apps.tweeton.R;
 import com.codepath.apps.tweeton.TwitterApplication;
 import com.codepath.apps.tweeton.TwitterClient;
@@ -24,7 +28,7 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements ComposeTweetFragment.onTweetListener {
 
     private TwitterClient client;
     private TweetsAdapter adapter;
@@ -48,6 +52,15 @@ public class TimelineActivity extends AppCompatActivity {
 
         client = TwitterApplication.getRestClient(); //singleton client
         populateTimeline(null);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.composeFab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment fragmet = ComposeTweetFragment.getInstance();
+                fragmet.show(getFragmentManager(), "Compost Tweet");
+            }
+        });
 
     }
 
@@ -94,4 +107,12 @@ public class TimelineActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onTweetSubmit() {
+        if (tweets.size() > 0) {
+            tweets.clear();
+            adapter.notifyDataSetChanged();
+        }
+        populateTimeline(null);
+    }
 }

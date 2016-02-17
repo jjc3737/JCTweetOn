@@ -4,5 +4,8 @@
     <string name="app_name">TweetOn</string>
     <string name="login_label">Connect to Twitter</string>
     <string name="title_activity_timeline">Home Timeline</string>
+    <string name="title_activity_test">test</string>
+    <string name="tweet_hint">What\'s happening?</string>
+    <string name="tweetButton">Tweet</string>
 
 </resources>

@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import com.codepath.apps.tweeton.Adapters.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.tweeton.Adapters.TweetsAdapter;
 import com.codepath.apps.tweeton.R;
 import com.codepath.apps.tweeton.TwitterApplication;
@@ -14,6 +15,7 @@ import com.codepath.apps.tweeton.TwitterClient;
 import com.codepath.apps.tweeton.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -21,13 +23,15 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cz.msebera.android.httpclient.Header;
 
 public class TimelineActivity extends AppCompatActivity {
 
     private TwitterClient client;
     private TweetsAdapter adapter;
     private ArrayList<Tweet> tweets;
+    private String maxID;
+
+    LinearLayoutManager layoutManager;
 
     @Bind(R.id.rvTimelineTweets)
     RecyclerView rvTweets;
@@ -43,7 +47,7 @@ public class TimelineActivity extends AppCompatActivity {
         setUpViews();
 
         client = TwitterApplication.getRestClient(); //singleton client
-        populateTimeline();
+        populateTimeline(null);
 
     }
 
@@ -52,30 +56,40 @@ public class TimelineActivity extends AppCompatActivity {
 
         adapter = new TweetsAdapter(tweets);
         rvTweets.setAdapter(adapter);
-        rvTweets.setLayoutManager(new LinearLayoutManager(this));
-
-        //onSCroll for infinite scroll
+        layoutManager = new LinearLayoutManager(this);
+        rvTweets.setLayoutManager(layoutManager);
+        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                populateTimeline(maxID);
+            }
+        });
 
     }
 
     //API request to get timeline json
 
     // fill recylce view by creating tweet object
-    private void populateTimeline() {
+    private void populateTimeline(String id) {
         //Clear out tweets if needed
-        client.getTimeline(new JsonHttpResponseHandler() {
+        client.getTimeline(id, new JsonHttpResponseHandler() {
             //success
+
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                tweets.addAll(Tweet.fromJSONArray(json));
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                tweets.addAll(Tweet.fromJSONArray(response));
+                if (tweets.size() > 0) {
+                    maxID = tweets.get(tweets.size() - 1).getUid();
+                }
                 adapter.notifyDataSetChanged();
+
             }
 
-            //failure
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
             }
+
 
         });
     }

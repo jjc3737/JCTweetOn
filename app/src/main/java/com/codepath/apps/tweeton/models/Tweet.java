@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Tweet {
 
     private String body;
-    private long uid; //unique id for tweet
+    private String uid; //unique id for tweet
     private User user;
     private String createdAt;
 
@@ -24,7 +24,7 @@ public class Tweet {
         return body;
     }
 
-    public long getUid() {
+    public String getUid() {
         return uid;
     }
 
@@ -37,7 +37,7 @@ public class Tweet {
         Tweet tweet = new Tweet();
         try {
             tweet.body = jsonObject.getString("text");
-            tweet.uid = jsonObject.getLong("id");
+            tweet.uid = jsonObject.getString("id_str");
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
         } catch (JSONException e) {

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.tweeton.R;
+import com.codepath.apps.tweeton.Utils;
 import com.codepath.apps.tweeton.models.Tweet;
 import com.squareup.picasso.Picasso;
 
@@ -37,6 +38,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView screenName;
         @Bind(R.id.tvTweet)
         TextView body;
+        @Bind(R.id.tvTimeStamp)
+        TextView timeStamp;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -75,6 +78,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         String thumbnail = tweet.getUser().getProfileImageUrl();
         String screenName = tweet.getUser().getScreenName();
         String body = tweet.getBody();
+        String timeStamp = Utils.getTimeStamp(tweet.getCreatedAt());
 
         ImageView iv = holder.image;
 
@@ -83,6 +87,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         holder.screenName.setText(screenName);
         holder.body.setText(body);
+        holder.timeStamp.setText(timeStamp);
     }
 
     @Override

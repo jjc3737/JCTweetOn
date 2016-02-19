@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.tweeton.R;
 import com.codepath.apps.tweeton.Utils;
 import com.codepath.apps.tweeton.models.Tweet;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -86,7 +86,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView iv = holder.image;
 
         iv.setImageResource(0);
-        Picasso.with(context).load(thumbnail).fit().into(iv);
+        Glide.with(context).load(thumbnail).fitCenter().into(iv);
 
         holder.name.setText(name);
         holder.screenName.setText(screenName);

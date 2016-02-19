@@ -50,5 +50,7 @@
         android:id="@+id/tvTweet"
         android:text="Tweet"
         android:maxLines="3"
+        android:linksClickable="true"
+        android:autoLink="all"
         android:ellipsize="end" />
 </RelativeLayout>

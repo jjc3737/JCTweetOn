@@ -3,6 +3,7 @@ package com.codepath.apps.tweeton.Activities;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,10 +41,14 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
     @Bind(R.id.rvTimelineTweets)
     RecyclerView rvTweets;
 
+    @Bind(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -78,6 +83,20 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
             }
         });
 
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.clear();
+                tweets.clear();
+                populateTimeline(null);
+            }
+        });
+
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
     }
 
     //API request to get timeline json
@@ -95,12 +114,14 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
                     maxID = tweets.get(tweets.size() - 1).getUid();
                 }
                 adapter.notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
 
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
+                swipeContainer.setRefreshing(false);
             }
 
 

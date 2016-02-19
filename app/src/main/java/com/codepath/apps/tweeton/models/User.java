@@ -1,13 +1,25 @@
 package com.codepath.apps.tweeton.models;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by JaneChung on 2/15/16.
  */
-public class User {
+@Table(name = "Users")
+public class User extends Model {
 
+    @Column(name = "remote_id", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    private long uid;
+    @Column(name = "ScreenName")
+    private String screenName;
+    @Column(name = "Profile_image")
+    private String profileImageUrl;
+    @Column(name = "Name")
     private String name;
 
     public String getName() {
@@ -26,9 +38,9 @@ public class User {
         return profileImageUrl;
     }
 
-    private long uid;
-    private String screenName;
-    private String profileImageUrl;
+    public User() {
+        super();
+    }
 
     public static User fromJSON(JSONObject json) {
         User user = new User();
@@ -41,6 +53,8 @@ public class User {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        user.save();
         return user;
     }
 }

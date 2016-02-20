@@ -1,6 +1,7 @@
 package com.codepath.apps.tweeton.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.tweeton.Activities.TweetDetailActivity;
 import com.codepath.apps.tweeton.R;
 import com.codepath.apps.tweeton.Utils;
 import com.codepath.apps.tweeton.models.Tweet;
@@ -51,13 +53,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         }
 
         public void onClick(View v) {
-//            int position = getAdapterPosition();
-//            Intent i = new Intent(itemView.getContext(), ArticleActivity.class);
-//
-//            Article article = mArticles.get(position);
-//            i.putExtra("article", Parcels.wrap(article));
-//
-//            itemView.getContext().startActivity(i);
+            int position = getAdapterPosition();
+            Tweet tweet = mTweets.get(position);
+            Intent i = new Intent(itemView.getContext(), TweetDetailActivity.class);
+            i.putExtra("tweet", tweet.getUid());
+//            i.putExtra("tweet", Parcels.wrap(article));
+
+            itemView.getContext().startActivity(i);
         }
 
     }

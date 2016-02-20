@@ -26,6 +26,8 @@ public class Tweet extends Model {
     public User user;
     @Column(name = "Created_At")
     public String createdAt;
+    @Column(name = "Media_url")
+    public String mediaURL;
 
     public User getUser() {
         return user;
@@ -43,6 +45,10 @@ public class Tweet extends Model {
         return createdAt;
     }
 
+    public String getMediaURL() {
+        return mediaURL;
+    }
+
     public Tweet() {
         super();
     }
@@ -55,6 +61,13 @@ public class Tweet extends Model {
             tweet.uid = jsonObject.getString("id_str");
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.findOrCreate(jsonObject.getJSONObject("user"));
+
+            JSONArray media = jsonObject.getJSONObject("entities").getJSONArray("media");
+
+           if (media != null) {
+               tweet.mediaURL = media.getJSONObject(0).getString("media_url");
+           }
+
             tweet.save();
 
         } catch (JSONException e) {

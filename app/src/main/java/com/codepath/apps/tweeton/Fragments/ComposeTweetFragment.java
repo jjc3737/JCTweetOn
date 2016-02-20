@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +14,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.apps.tweeton.R;
 import com.codepath.apps.tweeton.TwitterApplication;
 import com.codepath.apps.tweeton.TwitterClient;
+import com.codepath.apps.tweeton.Utils;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -38,12 +41,14 @@ public class ComposeTweetFragment extends DialogFragment {
 
     private TwitterClient client;
     private onTweetListener callback;
+    private static String mReply;
 
     public ComposeTweetFragment() {
 
     }
 
-    public static ComposeTweetFragment getInstance() {
+    public static ComposeTweetFragment getInstance(String reply) {
+        mReply = reply;
         return new ComposeTweetFragment();
     }
 
@@ -93,10 +98,21 @@ public class ComposeTweetFragment extends DialogFragment {
             }
         });
 
+        if (mReply != null || TextUtils.isEmpty(mReply)) {
+            tweetText.setText("");
+            tweetText.append(mReply + " ");
+        }
+
         return view;
     }
 
     private void submitTweet() {
+
+        if (Utils.isNetworkAvailable(getActivity()) == false) {
+            Toast.makeText(getActivity(), "Cannot post without internet", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         client.postTweet(tweetText.getText().toString(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

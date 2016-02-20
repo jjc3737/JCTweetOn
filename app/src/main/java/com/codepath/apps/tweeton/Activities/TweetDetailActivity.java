@@ -51,7 +51,10 @@ public class TweetDetailActivity extends AppCompatActivity implements ComposeTwe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tweet_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Detail");
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ButterKnife.bind(this);
 
@@ -99,7 +102,7 @@ public class TweetDetailActivity extends AppCompatActivity implements ComposeTwe
         reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment fragment = ComposeTweetFragment.getInstance(screenName.getText().toString());
+                DialogFragment fragment = ComposeTweetFragment.getInstance(screenName.getText().toString(), Integer.toString(screenName.getId()));
                 fragment.show(getFragmentManager(), "Reply to Tweet");
             }
         });
@@ -109,6 +112,6 @@ public class TweetDetailActivity extends AppCompatActivity implements ComposeTwe
     @Override
     public void onTweetSubmit() {
         //Change the reply sign to blue!!
-        // Would be nice to let regular activity know to refresh.. hmm! 
+        reply.setImageResource(R.drawable.blue_reply);
     }
 }

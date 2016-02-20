@@ -42,13 +42,15 @@ public class ComposeTweetFragment extends DialogFragment {
     private TwitterClient client;
     private onTweetListener callback;
     private static String mReply;
+    private static String mId;
 
     public ComposeTweetFragment() {
 
     }
 
-    public static ComposeTweetFragment getInstance(String reply) {
+    public static ComposeTweetFragment getInstance(String reply, String id) {
         mReply = reply;
+        mId = id;
         return new ComposeTweetFragment();
     }
 
@@ -98,11 +100,10 @@ public class ComposeTweetFragment extends DialogFragment {
             }
         });
 
-        if (mReply != null || TextUtils.isEmpty(mReply)) {
+        if (mReply != null || !TextUtils.isEmpty(mReply)) {
             tweetText.setText("");
             tweetText.append(mReply + " ");
         }
-
         return view;
     }
 
@@ -113,13 +114,24 @@ public class ComposeTweetFragment extends DialogFragment {
             return;
         }
 
-        client.postTweet(tweetText.getText().toString(), new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                callback.onTweetSubmit();
-                getDialog().dismiss();
-            }
-        });
+        if (mReply != null || !TextUtils.isEmpty(mReply)) {
+            client.replyTweet(tweetText.getText().toString(), mId, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    callback.onTweetSubmit();
+                    getDialog().dismiss();
+                }
+            });
+        } else {
+            client.postTweet(tweetText.getText().toString(), new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    callback.onTweetSubmit();
+                    getDialog().dismiss();
+                }
+            });
+
+        }
 
     }
 

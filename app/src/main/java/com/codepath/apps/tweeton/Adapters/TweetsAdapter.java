@@ -44,6 +44,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView timeStamp;
         @Bind(R.id.tvScreenName)
         TextView screenName;
+        @Bind(R.id.ivTweetMedia)
+        ImageView media;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -76,7 +78,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         Tweet tweet = mTweets.get(position);
 
         String thumbnail = tweet.getUser().getProfileImageUrl();
@@ -89,6 +91,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         iv.setImageResource(0);
         Glide.with(context).load(thumbnail).fitCenter().into(iv);
+
+        String mediaUrl = tweet.getMediaURL();
+        if (mediaUrl == null || mediaUrl.isEmpty()) {
+            holder.media.setVisibility(View.GONE);
+        } else {
+            Glide.with(context).load(mediaUrl).centerCrop().into(holder.media);
+        }
 
         holder.name.setText(name);
         holder.screenName.setText(screenName);

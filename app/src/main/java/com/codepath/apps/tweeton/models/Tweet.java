@@ -28,6 +28,8 @@ public class Tweet extends Model {
     public String createdAt;
     @Column(name = "Media_url")
     public String mediaURL;
+    @Column(name = "Video_url")
+    public String videoURL;
 
     public User getUser() {
         return user;
@@ -49,6 +51,10 @@ public class Tweet extends Model {
         return mediaURL;
     }
 
+    public String getVideoURL() {
+        return videoURL;
+    }
+
     public Tweet() {
         super();
     }
@@ -67,6 +73,15 @@ public class Tweet extends Model {
            if (media != null) {
                tweet.mediaURL = media.getJSONObject(0).getString("media_url");
            }
+
+            JSONArray video = jsonObject.getJSONObject("extended_entities").getJSONArray("media");
+
+            if (video != null) {
+                JSONArray videoInfo = video.getJSONObject(0).getJSONObject("video_info").getJSONArray("variants");
+                if (videoInfo != null) {
+                    tweet.videoURL = videoInfo.getJSONObject(0).getString("url");
+                }
+            }
 
             tweet.save();
 

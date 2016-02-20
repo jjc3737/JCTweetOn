@@ -82,7 +82,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-
+                if (Utils.isNetworkAvailable(TimelineActivity.this) == false) {
+                    Toast.makeText(TimelineActivity.this, "No more tweets saved to view", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 populateTimeline(maxID);
             }
         });
@@ -144,7 +147,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
                 Log.d("DEBUG", errorResponse.toString());
                 swipeContainer.setRefreshing(false);
             }
-
 
         });
     }

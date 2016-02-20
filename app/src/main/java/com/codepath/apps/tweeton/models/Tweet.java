@@ -22,7 +22,7 @@ public class Tweet extends Model {
     public String uid; //unique id for tweet
     @Column(name = "Body")
     public String body;
-    @Column(name = "User", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "User")
     public User user;
     @Column(name = "Created_At")
     public String createdAt;
@@ -54,14 +54,14 @@ public class Tweet extends Model {
             tweet.body = jsonObject.getString("text");
             tweet.uid = jsonObject.getString("id_str");
             tweet.createdAt = jsonObject.getString("created_at");
-            tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+            tweet.user = User.findOrCreate(jsonObject.getJSONObject("user"));
+            tweet.save();
 
         } catch (JSONException e) {
             e.printStackTrace();
 
         }
 
-        tweet.save();
         return tweet;
     }
 
@@ -85,8 +85,9 @@ public class Tweet extends Model {
     }
 
     public static List<Tweet> getAllTweets() {
+
         return new Select()
-                .from(Tweet.class)
+                .from(Tweet.class).orderBy("remote_id ASC")
                 .execute();
     }
 

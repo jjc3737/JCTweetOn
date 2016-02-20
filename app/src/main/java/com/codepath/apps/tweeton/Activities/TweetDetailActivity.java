@@ -77,9 +77,10 @@ public class TweetDetailActivity extends AppCompatActivity implements ComposeTwe
         }
 
         String videoUrl = mTweet.getVideoURL();
-        if (videoUrl == null || videoUrl.isEmpty()) {
+        if (videoUrl == null || videoUrl.isEmpty() || !videoUrl.contains("mp4")) {
             video.setVisibility(View.GONE);
         } else {
+            media.setVisibility(View.GONE);
             video.setVideoPath(videoUrl);
             MediaController mediaController = new MediaController(this);
             mediaController.setAnchorView(video);

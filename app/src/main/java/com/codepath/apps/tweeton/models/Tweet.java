@@ -79,7 +79,14 @@ public class Tweet extends Model {
             if (video != null) {
                 JSONArray videoInfo = video.getJSONObject(0).getJSONObject("video_info").getJSONArray("variants");
                 if (videoInfo != null) {
-                    tweet.videoURL = videoInfo.getJSONObject(0).getString("url");
+
+                    for (int i = 0; i < videoInfo.length(); i ++) {
+                        if (videoInfo.getJSONObject(i).getString("content_type").contains("mp4")) {
+                            tweet.videoURL = videoInfo.getJSONObject(i).getString("url");
+                            break;
+                        }
+                    }
+
                 }
             }
 

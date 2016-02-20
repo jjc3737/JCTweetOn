@@ -1,56 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent">
 
-    <ImageView
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="5dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/ivUserThumbnail"
-        android:scaleType="fitXY"/>
-
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvUserName"
-        android:layout_toRightOf="@+id/ivUserThumbnail"
-        android:layout_alignTop="@+id/ivUserThumbnail"
-        android:text="Name"/>
+        android:layout_margin="10dp"
+        android:background="#fff">
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/ivUserThumbnail"
+            android:scaleType="fitXY"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvScreenName"
-        android:layout_toRightOf="@+id/tvUserName"
-        android:layout_marginLeft="10dp"
-        android:layout_alignTop="@+id/tvUserName"
-        android:text="Screenname"/>
+     <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvUserName"
+            android:layout_toRightOf="@+id/ivUserThumbnail"
+            android:layout_alignTop="@+id/ivUserThumbnail"
+            android:text="Name"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvTimeStamp"
-        android:layout_toRightOf="@+id/tvScreenName"
-        android:gravity="right"
-        android:text="test"
-        android:layout_alignTop="@+id/tvScreenName"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvScreenName"
+            android:layout_toRightOf="@+id/tvUserName"
+            android:layout_marginLeft="10dp"
+            android:layout_alignTop="@+id/tvUserName"
+            android:text="Screenname"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUserName"
-        android:layout_alignLeft="@+id/tvUserName"
-        android:id="@+id/tvTweet"
-        android:text="Tweet"
-        android:maxLines="3"
-        android:linksClickable="true"
-        android:autoLink="all"
-        android:ellipsize="end" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvTimeStamp"
+            android:layout_toRightOf="@+id/tvScreenName"
+            android:gravity="right"
+            android:text="test"
+            android:layout_alignTop="@+id/tvScreenName"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUserName"
+            android:layout_alignLeft="@+id/tvUserName"
+            android:id="@+id/tvTweet"
+            android:text="Tweet"
+            android:maxLines="3"
+            android:linksClickable="true"
+            android:autoLink="all"
+            android:ellipsize="end" />
+    </RelativeLayout>
 </RelativeLayout>

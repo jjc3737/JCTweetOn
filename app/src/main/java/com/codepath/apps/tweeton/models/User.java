@@ -14,6 +14,7 @@ import org.json.JSONObject;
 @Table(name = "Users")
 public class User extends Model {
 
+
     @Column(name = "remote_id", unique = true)
     private long uid;
     @Column(name = "ScreenName")

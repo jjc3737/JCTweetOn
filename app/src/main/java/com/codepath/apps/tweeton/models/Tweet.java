@@ -62,6 +62,7 @@ public class Tweet extends Model {
 
         }
 
+        tweet.save();
         return tweet;
     }
 

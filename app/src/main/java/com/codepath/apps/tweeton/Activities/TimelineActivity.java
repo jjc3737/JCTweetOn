@@ -10,13 +10,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.activeandroid.query.Delete;
 import com.codepath.apps.tweeton.Adapters.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.tweeton.Adapters.TweetsAdapter;
 import com.codepath.apps.tweeton.Fragments.ComposeTweetFragment;
 import com.codepath.apps.tweeton.R;
 import com.codepath.apps.tweeton.TwitterApplication;
 import com.codepath.apps.tweeton.TwitterClient;
+import com.codepath.apps.tweeton.Utils;
 import com.codepath.apps.tweeton.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -79,6 +82,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
+                if (Utils.isNetworkAvailable(TimelineActivity.this) == false) {
+                    Toast.makeText(TimelineActivity.this, "No more tweets saved to view", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 populateTimeline(maxID);
             }
         });
@@ -86,9 +93,15 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                adapter.clear();
-                tweets.clear();
-                populateTimeline(null);
+                if (Utils.isNetworkAvailable(TimelineActivity.this) == false) {
+                    Toast.makeText(TimelineActivity.this, "Can't refresh without internet", Toast.LENGTH_SHORT).show();
+                    swipeContainer.setRefreshing(false);
+                    return;
+                } else {
+                    adapter.clear();
+                    tweets.clear();
+                    populateTimeline(null);
+                }
             }
         });
 
@@ -103,12 +116,23 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
 
     // fill recylce view by creating tweet object
     private void populateTimeline(String id) {
+
+        if (Utils.isNetworkAvailable(this) == false ) {
+            if (id == null) {
+                tweets.addAll(Tweet.getAllTweets());
+                adapter.notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
+            }
+            Toast.makeText(this, "Offline Mode", Toast.LENGTH_SHORT).show();
+            return;
+        }
         //Clear out tweets if needed
         client.getTimeline(id, new JsonHttpResponseHandler() {
             //success
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                new Delete().from(Tweet.class).execute();
                 tweets.addAll(Tweet.fromJSONArray(response));
                 if (tweets.size() > 0) {
                     maxID = tweets.get(tweets.size() - 1).getUid();
@@ -123,7 +147,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
                 Log.d("DEBUG", errorResponse.toString());
                 swipeContainer.setRefreshing(false);
             }
-
 
         });
     }

@@ -52,6 +52,10 @@
             android:name=".Activities.TimelineActivity"
             android:label="@string/title_activity_timeline"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.TweetDetailActivity"
+            android:label="@string/title_activity_tweet_detail"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

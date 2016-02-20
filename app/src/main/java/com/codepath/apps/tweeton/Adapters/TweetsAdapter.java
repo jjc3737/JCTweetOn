@@ -56,8 +56,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             int position = getAdapterPosition();
             Tweet tweet = mTweets.get(position);
             Intent i = new Intent(itemView.getContext(), TweetDetailActivity.class);
-//
-//            Article article = mArticles.get(position);
+            i.putExtra("tweet", tweet.getUid());
 //            i.putExtra("tweet", Parcels.wrap(article));
 
             itemView.getContext().startActivity(i);

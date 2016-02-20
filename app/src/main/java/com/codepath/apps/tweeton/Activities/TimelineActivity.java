@@ -65,8 +65,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment fragmet = ComposeTweetFragment.getInstance();
-                fragmet.show(getFragmentManager(), "Compost Tweet");
+                DialogFragment fragment = ComposeTweetFragment.getInstance(null);
+                fragment.show(getFragmentManager(), "Compose Tweet");
             }
         });
 

@@ -2,14 +2,17 @@ package com.codepath.apps.tweeton.Activities;
 
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.tweeton.Fragments.ComposeTweetFragment;
@@ -40,6 +43,8 @@ public class TweetDetailActivity extends AppCompatActivity implements ComposeTwe
     ImageButton reply;
     @Bind(R.id.vDividerTwo)
     View divider;
+    @Bind(R.id.vvVideoMedia)
+    VideoView video;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,24 @@ public class TweetDetailActivity extends AppCompatActivity implements ComposeTwe
             media.setVisibility(View.GONE);
         } else {
             Glide.with(this).load(mediaUrl).centerCrop().into(media);
+        }
+
+        String videoUrl = mTweet.getVideoURL();
+        if (videoUrl == null || videoUrl.isEmpty() || !videoUrl.contains("mp4")) {
+            video.setVisibility(View.GONE);
+        } else {
+            media.setVisibility(View.GONE);
+            video.setVideoPath(videoUrl);
+            MediaController mediaController = new MediaController(this);
+            mediaController.setAnchorView(video);
+            video.setMediaController(mediaController);
+            video.requestFocus();
+            video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                // Close the progress bar and play the video
+                public void onPrepared(MediaPlayer mp) {
+                    video.start();
+                }
+            });
         }
 
         timeStamp.setText(Utils.getTimeStamp(mTweet.getCreatedAt()));

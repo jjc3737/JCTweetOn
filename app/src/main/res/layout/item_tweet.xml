@@ -2,17 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent">
+    android:background="@color/colorPrimaryDark">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="#fff">
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/rounded_bg">
+
         <ImageView
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:layout_marginTop="5dp"
+            android:layout_margin="10dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:id="@+id/ivUserThumbnail"
@@ -33,20 +36,29 @@
             android:layout_toRightOf="@+id/tvUserName"
             android:layout_marginLeft="10dp"
             android:layout_alignTop="@+id/tvUserName"
+            android:textColor="@color/colorPrimaryDark"
             android:text="Screenname"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvTimeStamp"
-            android:layout_toRightOf="@+id/tvScreenName"
             android:gravity="right"
             android:text="test"
             android:layout_alignTop="@+id/tvScreenName"
-            android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:id="@+id/ivTimeStamp"
+            android:layout_toLeftOf="@+id/tvTimeStamp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/time_stamp"
+            android:layout_alignTop="@+id/tvTimeStamp"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -59,5 +71,17 @@
             android:linksClickable="true"
             android:autoLink="all"
             android:ellipsize="end" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:id="@+id/ivTweetMedia"
+            android:layout_below="@+id/ivUserThumbnail"
+            android:layout_marginTop="10dp"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:layout_margin="5dp"     />
+
+
     </RelativeLayout>
 </RelativeLayout>

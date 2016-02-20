@@ -53,6 +53,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         setContentView(R.layout.activity_timeline);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.home);
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
@@ -65,7 +66,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment fragment = ComposeTweetFragment.getInstance(null);
+                DialogFragment fragment = ComposeTweetFragment.getInstance(null, null);
                 fragment.show(getFragmentManager(), "Compose Tweet");
             }
         });
@@ -105,10 +106,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
             }
         });
 
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        swipeContainer.setColorSchemeResources(R.color.colorAccent,
+                R.color.colorPrimaryDark,
+                R.color.colorPrimary);
 
     }
 

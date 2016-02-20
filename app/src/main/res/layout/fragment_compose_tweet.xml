@@ -11,9 +11,9 @@
         android:hint="@string/tweet_hint"
         android:maxLength="140"
         android:minHeight="60dp"
-        android:paddingTop="10dp"
         android:singleLine="false"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium">
+        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+        android:theme="@style/AppTheme">
 
         <requestFocus />
     </EditText>
@@ -27,7 +27,9 @@
         android:layout_alignParentRight="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_below="@+id/etTweet"/>
+        android:layout_below="@+id/etTweet"
+        android:textColor="#fff"
+        android:background="@color/colorPrimaryDark"/>
 
     <TextView
         android:layout_width="wrap_content"

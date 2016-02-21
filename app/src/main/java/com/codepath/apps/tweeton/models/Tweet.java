@@ -56,6 +56,7 @@ public class Tweet extends Model {
     }
 
     public Tweet() {
+
         super();
     }
 
@@ -119,6 +120,7 @@ public class Tweet extends Model {
 
         return tweets;
     }
+
 
     public static List<Tweet> getAllTweets() {
 

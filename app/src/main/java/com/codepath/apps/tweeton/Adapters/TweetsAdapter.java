@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.apps.tweeton.Activities.TweetDetailActivity;
 import com.codepath.apps.tweeton.R;
 import com.codepath.apps.tweeton.Utils;
-import com.codepath.apps.tweeton.models.Tweet;
+import com.codepath.apps.tweeton.models.TweetGson;
 
 import java.util.List;
 
@@ -25,10 +25,10 @@ import butterknife.ButterKnife;
  */
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
 
-    private List<Tweet> mTweets;
+    private List<TweetGson> mTweets;
     private Context context;
 
-    public TweetsAdapter(List<Tweet> tweets) {
+    public TweetsAdapter(List<TweetGson> tweets) {
         mTweets = tweets;
     }
 
@@ -56,9 +56,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         public void onClick(View v) {
             int position = getAdapterPosition();
-            Tweet tweet = mTweets.get(position);
+            TweetGson tweet = mTweets.get(position);
             Intent i = new Intent(itemView.getContext(), TweetDetailActivity.class);
-            i.putExtra("tweet", tweet.getUid());
+            i.putExtra("tweet", tweet.getIdStr());
 //            i.putExtra("tweet", Parcels.wrap(article));
 
             itemView.getContext().startActivity(i);
@@ -79,12 +79,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Tweet tweet = mTweets.get(position);
+        TweetGson tweet = mTweets.get(position);
 
         String thumbnail = tweet.getUser().getProfileImageUrl();
         String name = tweet.getUser().getName();
         String screenName = "@" + tweet.getUser().getScreenName();
-        String body = tweet.getBody();
+        String body = tweet.getText();
         String timeStamp = Utils.getTimeStamp(tweet.getCreatedAt());
 
         ImageView iv = holder.image;
@@ -115,7 +115,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    public void addAll(List<Tweet> list) {
+    public void addAll(List<TweetGson> list) {
         mTweets.addAll(list);
         notifyDataSetChanged();
     }

@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.activeandroid.query.Delete;
 import com.codepath.apps.tweeton.Adapters.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.tweeton.Adapters.TweetsAdapter;
 import com.codepath.apps.tweeton.Fragments.ComposeTweetFragment;
@@ -20,12 +19,11 @@ import com.codepath.apps.tweeton.R;
 import com.codepath.apps.tweeton.TwitterApplication;
 import com.codepath.apps.tweeton.TwitterClient;
 import com.codepath.apps.tweeton.Utils;
-import com.codepath.apps.tweeton.models.Tweet;
+import com.codepath.apps.tweeton.models.TweetGson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -36,7 +34,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
 
     private TwitterClient client;
     private TweetsAdapter adapter;
-    private ArrayList<Tweet> tweets;
+    private ArrayList<TweetGson> tweets;
     private String maxID;
 
     LinearLayoutManager layoutManager;
@@ -117,35 +115,35 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
     // fill recylce view by creating tweet object
     private void populateTimeline(String id) {
 
-        if (Utils.isNetworkAvailable(this) == false ) {
-            if (id == null) {
-                tweets.addAll(Tweet.getAllTweets());
-                adapter.notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
-            }
-            Toast.makeText(this, "Offline Mode", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if (Utils.isNetworkAvailable(this) == false ) {
+//            if (id == null) {
+//                tweets.addAll(Tweet.getAllTweets());
+//                adapter.notifyDataSetChanged();
+//                swipeContainer.setRefreshing(false);
+//            }
+//            Toast.makeText(this, "Offline Mode", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
         //Clear out tweets if needed
         client.getTimeline(id, new JsonHttpResponseHandler() {
             //success
 
             @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("DEBUG", responseString);
+                swipeContainer.setRefreshing(false);
+            }
+
+            @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                new Delete().from(Tweet.class).execute();
-                tweets.addAll(Tweet.fromJSONArray(response));
+                tweets = TweetGson.fromJson(response);
+
                 if (tweets.size() > 0) {
-                    maxID = tweets.get(tweets.size() - 1).getUid();
+                    maxID = tweets.get(tweets.size() - 1).getIdStr();
                 }
                 adapter.notifyDataSetChanged();
                 swipeContainer.setRefreshing(false);
 
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
-                swipeContainer.setRefreshing(false);
             }
 
         });

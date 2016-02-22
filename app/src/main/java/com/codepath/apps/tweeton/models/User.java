@@ -11,6 +11,7 @@ import org.json.JSONObject;
 /**
  * Created by JaneChung on 2/15/16.
  */
+
 @Table(name = "Users")
 public class User extends Model {
 
@@ -23,6 +24,12 @@ public class User extends Model {
     private String profileImageUrl;
     @Column(name = "Name")
     private String name;
+    @Column(name = "Tagline")
+    private String tagline;
+    @Column(name = "FollowingCount")
+    private int followingCount;
+    @Column(name = "FollwersCount")
+    private int followersCount;
 
     public String getName() {
         return name;
@@ -38,6 +45,18 @@ public class User extends Model {
 
     public String getProfileImageUrl() {
         return profileImageUrl;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
+    }
+
+    public int getFollowingCount() {
+        return followingCount;
+    }
+
+    public String getTagline() {
+        return tagline;
     }
 
     public User() {
@@ -71,11 +90,15 @@ public class User extends Model {
             user.uid = json.getLong("id");
             user.screenName = json.getString("screen_name");
             user.profileImageUrl = json.getString("profile_image_url");
-            user.save();
+            user.tagline = json.getString("description");
+            user.followersCount = json.getInt("followers_count");
+            user.followingCount = json.getInt("friends_count");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        user.save();
         return user;
     }
+
 }

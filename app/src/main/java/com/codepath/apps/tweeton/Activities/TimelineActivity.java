@@ -1,51 +1,38 @@
 package com.codepath.apps.tweeton.Activities;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.view.ViewGroup;
 
-import com.activeandroid.query.Delete;
-import com.codepath.apps.tweeton.Adapters.EndlessRecyclerViewScrollListener;
-import com.codepath.apps.tweeton.Adapters.TweetsAdapter;
+import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.tweeton.Fragments.ComposeTweetFragment;
+import com.codepath.apps.tweeton.Fragments.HomeTimelineFragment;
+import com.codepath.apps.tweeton.Fragments.MentionsTimelineFragment;
 import com.codepath.apps.tweeton.R;
-import com.codepath.apps.tweeton.TwitterApplication;
-import com.codepath.apps.tweeton.TwitterClient;
-import com.codepath.apps.tweeton.Utils;
-import com.codepath.apps.tweeton.models.Tweet;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class TimelineActivity extends AppCompatActivity implements ComposeTweetFragment.onTweetListener {
 
-    private TwitterClient client;
-    private TweetsAdapter adapter;
-    private ArrayList<Tweet> tweets;
-    private String maxID;
+    @Bind(R.id.viewpager)
+    ViewPager pager;
 
-    LinearLayoutManager layoutManager;
+    @Bind(R.id.tabs)
+    PagerSlidingTabStrip tabs;
 
-    @Bind(R.id.rvTimelineTweets)
-    RecyclerView rvTweets;
-
-    @Bind(R.id.swipeContainer)
-    SwipeRefreshLayout swipeContainer;
+    HomeTimelineFragment homeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +44,12 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
-        setUpViews();
 
-        client = TwitterApplication.getRestClient(); //singleton client
-        populateTimeline(null);
+        //Set the viewpager adapter for the pager
+        pager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        //Attach the tabstrip to the viewpager
+        tabs.setViewPager(pager);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.composeFab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -73,90 +62,67 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
 
     }
 
-    public void setUpViews() {
-        tweets = new ArrayList<>();
 
-        adapter = new TweetsAdapter(tweets);
-        rvTweets.setAdapter(adapter);
-        layoutManager = new LinearLayoutManager(this);
-        rvTweets.setLayoutManager(layoutManager);
-        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                if (Utils.isNetworkAvailable(TimelineActivity.this) == false) {
-                    Toast.makeText(TimelineActivity.this, "No more tweets saved to view", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                populateTimeline(maxID);
-            }
-        });
 
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (Utils.isNetworkAvailable(TimelineActivity.this) == false) {
-                    Toast.makeText(TimelineActivity.this, "Can't refresh without internet", Toast.LENGTH_SHORT).show();
-                    swipeContainer.setRefreshing(false);
-                    return;
-                } else {
-                    adapter.clear();
-                    tweets.clear();
-                    populateTimeline(null);
-                }
-            }
-        });
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_timeline, menu);
+        //do something with item
 
-        swipeContainer.setColorSchemeResources(R.color.colorAccent,
-                R.color.colorPrimaryDark,
-                R.color.colorPrimary);
-
+        return true;
     }
 
-    //API request to get timeline json
-
-    // fill recylce view by creating tweet object
-    private void populateTimeline(String id) {
-
-        if (Utils.isNetworkAvailable(this) == false ) {
-            if (id == null) {
-                tweets.addAll(Tweet.getAllTweets());
-                adapter.notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
-            }
-            Toast.makeText(this, "Offline Mode", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        //Clear out tweets if needed
-        client.getTimeline(id, new JsonHttpResponseHandler() {
-            //success
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                new Delete().from(Tweet.class).execute();
-                tweets.addAll(Tweet.fromJSONArray(response));
-                if (tweets.size() > 0) {
-                    maxID = tweets.get(tweets.size() - 1).getUid();
-                }
-                adapter.notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
-                swipeContainer.setRefreshing(false);
-            }
-
-        });
+    public void onProfileView(MenuItem mi) {
+        //launch profile view
+        Intent i = new Intent(this, ProfileActivity.class);
+        startActivity(i);
     }
 
     @Override
     public void onTweetSubmit() {
-        if (tweets.size() > 0) {
-            tweets.clear();
-            adapter.notifyDataSetChanged();
-        }
-        populateTimeline(null);
+        homeFragment.clearAll();
+        homeFragment.populateTimeline(null);
     }
+
+
+    //Return the order of the fragments
+    public class TweetsPagerAdapter extends FragmentPagerAdapter {
+        private String tabTitles[] = { "Home", "Mentions" };
+
+        public TweetsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                homeFragment = new HomeTimelineFragment();
+                return homeFragment;
+            } else if (position == 1){
+                return new MentionsTimelineFragment();
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            super.destroyItem(container, position, object);
+            homeFragment = null;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
+    }
+
+
+
 }

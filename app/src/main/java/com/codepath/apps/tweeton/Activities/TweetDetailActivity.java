@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -59,13 +60,13 @@ public class TweetDetailActivity extends AppCompatActivity implements ComposeTwe
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        String tweetId = intent.getStringExtra("tweet");
-        if (tweetId == null || tweetId.isEmpty()) {
+        String id = intent.getStringExtra("tweet");
+        if (id == null || id.isEmpty()) {
             Toast.makeText(this, "Could not get tweet details, please try again", Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        mTweet = Tweet.getTweetFromId(tweetId);
+        mTweet = Tweet.getTweetFromId(id);
         User user = mTweet.getUser();
         Glide.with(this).load(user.getProfileImageUrl()).fitCenter().into(profile);
         userName.setText(user.getName());
@@ -113,5 +114,19 @@ public class TweetDetailActivity extends AppCompatActivity implements ComposeTwe
     public void onTweetSubmit() {
         //Change the reply sign to blue!!
         reply.setImageResource(R.drawable.blue_reply);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 }

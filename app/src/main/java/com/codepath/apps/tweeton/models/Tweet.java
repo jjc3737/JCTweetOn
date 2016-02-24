@@ -55,6 +55,7 @@ public class Tweet extends Model {
         return videoURL;
     }
 
+
     public Tweet() {
         super();
     }
@@ -90,7 +91,6 @@ public class Tweet extends Model {
                 }
             }
 
-            tweet.save();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -120,18 +120,21 @@ public class Tweet extends Model {
         return tweets;
     }
 
-    public static List<Tweet> getAllTweets() {
-
-        return new Select()
+    public static ArrayList<Tweet> getAllTweets() {
+        ArrayList<Tweet> tweets = new ArrayList<>();
+        List<Tweet> list = new Select()
                 .from(Tweet.class).orderBy("remote_id ASC")
                 .execute();
+
+        tweets.addAll(list);
+        return tweets;
     }
+
 
     public static Tweet getTweetFromId(String tweetID) {
         return new Select()
                 .from(Tweet.class)
                 .where("remote_id = ?", tweetID)
-                .orderBy("remote_id DESC")
                 .executeSingle();
 
     }

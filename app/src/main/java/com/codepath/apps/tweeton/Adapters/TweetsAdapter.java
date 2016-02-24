@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.tweeton.Activities.ProfileActivity;
 import com.codepath.apps.tweeton.Activities.TweetDetailActivity;
 import com.codepath.apps.tweeton.R;
 import com.codepath.apps.tweeton.Utils;
@@ -51,18 +52,37 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+            image.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
 
         public void onClick(View v) {
             int position = getAdapterPosition();
             Tweet tweet = mTweets.get(position);
-            Intent i = new Intent(itemView.getContext(), TweetDetailActivity.class);
-            i.putExtra("tweet", tweet.getUid());
-//            i.putExtra("tweet", Parcels.wrap(article));
 
-            itemView.getContext().startActivity(i);
+            switch (v.getId()) {
+                case R.id.ivUserThumbnail:
+                    Intent i = new Intent(itemView.getContext(), ProfileActivity.class);
+                    i.putExtra("screenName", tweet.getUser().getScreenName());
+                    itemView.getContext().startActivity(i);
+                    break;
+                default:
+                    Intent x = new Intent(itemView.getContext(), TweetDetailActivity.class);
+                    x.putExtra("tweet", tweet.getUid());
+                    itemView.getContext().startActivity(x);
+                    break;
+            }
+
+
         }
+
+        void setOnClickListener(View v) {
+            if (v != null) {
+                v.setOnClickListener(this);
+            }
+        }
+
+
 
     }
 
@@ -96,7 +116,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         if (mediaUrl == null || mediaUrl.isEmpty()) {
             holder.media.setVisibility(View.GONE);
         } else {
-            Glide.with(context).load(mediaUrl).centerCrop().into(holder.media);
+            Glide.with(context).load(mediaUrl).placeholder(R.drawable.placeholder_tweet).centerCrop().into(holder.media);
         }
 
         holder.name.setText(name);
@@ -104,6 +124,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         holder.body.setText(body);
         holder.timeStamp.setText(timeStamp);
     }
+
 
     @Override
     public int getItemCount() {

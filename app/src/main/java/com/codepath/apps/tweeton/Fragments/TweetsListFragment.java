@@ -1,5 +1,6 @@
 package com.codepath.apps.tweeton.Fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -36,6 +37,7 @@ public class TweetsListFragment extends Fragment {
     private ArrayList<Tweet> tweets;
 
     LinearLayoutManager layoutManager;
+    ProgressDialog pd;
     //inflation logic
 
     @Nullable
@@ -44,7 +46,6 @@ public class TweetsListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_tweet_list, container, false);
         ButterKnife.bind(this, v);
         setUpViews();
-
 
         return v;
     }
@@ -55,7 +56,15 @@ public class TweetsListFragment extends Fragment {
         tweets = new ArrayList<>();
 
         adapter = new TweetsAdapter(tweets);
+        setUpProgressDialog();
         super.onCreate(savedInstanceState);
+    }
+
+    public void setUpProgressDialog() {
+        pd = new ProgressDialog(getActivity());
+        pd.setTitle("Loading...");
+        pd.setMessage("Please wait.");
+        pd.setCancelable(false);
     }
 
     public void setUpViews() {

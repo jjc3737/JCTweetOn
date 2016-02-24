@@ -34,6 +34,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
 
     HomeTimelineFragment homeFragment;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

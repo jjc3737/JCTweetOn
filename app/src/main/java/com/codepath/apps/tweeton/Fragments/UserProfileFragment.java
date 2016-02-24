@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.apps.tweeton.R;
 import com.codepath.apps.tweeton.TwitterApplication;
 import com.codepath.apps.tweeton.TwitterClient;
+import com.codepath.apps.tweeton.Utils;
 import com.codepath.apps.tweeton.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -69,13 +70,12 @@ public class UserProfileFragment extends Fragment{
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 user = User.findOrCreate(response);
-
                 populateProfileHeader(user);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                //do something
+                Utils.showToastForException(getActivity());
             }
         });
     }

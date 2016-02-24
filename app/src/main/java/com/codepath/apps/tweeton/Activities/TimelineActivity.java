@@ -50,7 +50,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         //Attach the tabstrip to the viewpager
         tabs.setViewPager(pager);
 
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.composeFab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,8 +60,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         });
 
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

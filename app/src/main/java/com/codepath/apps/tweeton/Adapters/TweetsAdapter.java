@@ -116,7 +116,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         if (mediaUrl == null || mediaUrl.isEmpty()) {
             holder.media.setVisibility(View.GONE);
         } else {
-            Glide.with(context).load(mediaUrl).centerCrop().into(holder.media);
+            Glide.with(context).load(mediaUrl).placeholder(R.drawable.placeholder_tweet).centerCrop().into(holder.media);
         }
 
         holder.name.setText(name);

@@ -2,7 +2,6 @@ package com.codepath.apps.tweeton.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.codepath.apps.tweeton.TwitterApplication;
@@ -61,7 +60,7 @@ public class UserTimelineFragment extends TweetsListFragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
+                Utils.showToastForException(getActivity());
                 stopRefreshing();
             }
 

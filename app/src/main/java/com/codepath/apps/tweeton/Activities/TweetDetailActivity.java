@@ -77,7 +77,7 @@ public class TweetDetailActivity extends AppCompatActivity implements ComposeTwe
         if (mediaUrl == null || mediaUrl.isEmpty()) {
             media.setVisibility(View.GONE);
         } else {
-            Glide.with(this).load(mediaUrl).centerCrop().into(media);
+            Glide.with(this).load(mediaUrl).placeholder(R.drawable.placeholder_tweet).centerCrop().into(media);
         }
 
         String videoUrl = mTweet.getVideoURL();

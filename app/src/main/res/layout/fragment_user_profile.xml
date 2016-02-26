@@ -52,15 +52,21 @@
         android:layout_below="@+id/rlHeader"
         android:orientation="horizontal"
         android:layout_marginBottom="10dp">
-        <TextView
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tvFollowers"/>
-        <TextView
+            android:id="@+id/btnFollowers"
+            style="?android:attr/borderlessButtonStyle"
+            android:textAllCaps="false"
+            />
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:id="@+id/tvFollowing"/>
+            android:id="@+id/btnFollowing"
+            style="?android:attr/borderlessButtonStyle"
+            android:textAllCaps="false"
+            />
     </LinearLayout>
 
 </RelativeLayout>

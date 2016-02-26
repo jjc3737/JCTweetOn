@@ -5,8 +5,11 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by JaneChung on 2/15/16.
@@ -99,6 +102,55 @@ public class User extends Model {
         }
         user.save();
         return user;
+    }
+
+    public static ArrayList<User> fromJSONObject(JSONObject jsonObject) {
+        ArrayList<User> users = new ArrayList<>();
+        try {
+            JSONArray userJson = jsonObject.getJSONArray("users");
+
+            for (int i = 0; i < userJson.length(); i++) {
+                JSONObject user = userJson.getJSONObject(i);
+                User u = findOrCreate(user);
+
+                if (u != null) {
+                    users.add(u);
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+        }
+
+        return users;
+
+    }
+
+    public static ArrayList<User> getFollowersOfUser(User user) {
+        ArrayList<User> users = new ArrayList<>();
+        //Todo
+        return users;
+    }
+
+    public static ArrayList<User> getFollowingOfUser(User user) {
+        ArrayList<User> users = new ArrayList<>();
+        //Todo
+        return users;
+    }
+
+    public static User getCurrentUser() {
+        return new Select()
+                .from(User.class)
+                .where("current_user = 1")
+                .executeSingle();
+    }
+
+    public static User getUserFromScreenName(String screenName) {
+        return new Select()
+                .from(User.class)
+                .where("ScreenName = ?", screenName)
+                .executeSingle();
     }
 
 }

@@ -8,6 +8,9 @@ import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -62,5 +65,16 @@ public class Utils {
     public static void showToastForException(Context context) {
 
         Toast.makeText(context, "Error: Please try again", Toast.LENGTH_SHORT).show();
+    }
+
+
+    public static String getCurrentCursor(JSONObject response) {
+        String cursor = null;
+        try {
+            cursor = response.getString("next_cursor_str");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return cursor;
     }
 }

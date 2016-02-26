@@ -53,18 +53,11 @@ public class TweetsListFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        tweets = new ArrayList<>();
-
-        adapter = new TweetsAdapter(tweets);
-        setUpProgressDialog();
         super.onCreate(savedInstanceState);
-    }
+        tweets = new ArrayList<>();
+        setUpProgressDialogForLoading();
+        adapter = new TweetsAdapter(tweets);
 
-    public void setUpProgressDialog() {
-        pd = new ProgressDialog(getActivity());
-        pd.setTitle("Loading...");
-        pd.setMessage("Please wait.");
-        pd.setCancelable(false);
     }
 
     public void setUpViews() {
@@ -127,4 +120,10 @@ public class TweetsListFragment extends Fragment {
         //to be overridden
     }
 
+    public void setUpProgressDialogForLoading() {
+        pd = new ProgressDialog(getActivity());
+        pd.setTitle("Loading...");
+        pd.setMessage("Please wait.");
+        pd.setCancelable(false);
+    }
 }

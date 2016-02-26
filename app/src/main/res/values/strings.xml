@@ -16,5 +16,6 @@
     <string name="replyButton">REPLY</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="search_title">Search</string>
+    <string name="title_activity_users">UsersActivity</string>
 
 </resources>

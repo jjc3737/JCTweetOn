@@ -30,6 +30,9 @@ public class Tweet extends Model {
     public String mediaURL;
     @Column(name = "Video_url")
     public String videoURL;
+    @Column(name = "Favorited")
+    public Boolean favorited;
+
 
     public User getUser() {
         return user;
@@ -55,6 +58,9 @@ public class Tweet extends Model {
         return videoURL;
     }
 
+    public Boolean getFavorited() {
+        return favorited;
+    }
 
     public Tweet() {
         super();
@@ -68,6 +74,7 @@ public class Tweet extends Model {
             tweet.uid = jsonObject.getString("id_str");
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.findOrCreate(jsonObject.getJSONObject("user"));
+            tweet.favorited = jsonObject.getBoolean("favorited");
 
             JSONArray media = jsonObject.getJSONObject("entities").getJSONArray("media");
 
@@ -137,6 +144,12 @@ public class Tweet extends Model {
                 .where("remote_id = ?", tweetID)
                 .executeSingle();
 
+    }
+
+    public static void setFavorited(String tweetiD, Boolean favorited) {
+        Tweet tweet = getTweetFromId(tweetiD);
+        tweet.favorited = favorited;
+        tweet.save();
     }
 
 }

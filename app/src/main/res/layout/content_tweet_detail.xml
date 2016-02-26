@@ -114,6 +114,19 @@
             android:src="@drawable/reply"
             android:layout_alignBottom="@+id/tvDetailTimeStamp"/>
 
+        <ImageButton
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/btnFavorite"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:background="@android:color/transparent"
+            android:layout_alignBottom="@+id/tvDetailTimeStamp"
+            android:src="@drawable/not_favorited"/>
+
 
         <View
             android:id="@+id/vDividerTwo"

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.codepath.apps.tweeton.Adapters.EndlessRecyclerViewScrollListener;
@@ -55,6 +56,7 @@ public class UsersActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String userScreenName = getIntent().getStringExtra(USER_SCREENAME_EXTRA);
         showFollowing = getIntent().getBooleanExtra(IS_FOLLOWING_EXTRA, true);
@@ -124,7 +126,7 @@ public class UsersActivity extends AppCompatActivity {
         //Clear out tweets if needed
 
         if (showFollowing) {
-            client.getFollowers(currentUser.getScreenName(), cursor, new JsonHttpResponseHandler() {
+            client.getFollowing(currentUser.getScreenName(), cursor, new JsonHttpResponseHandler() {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -143,8 +145,9 @@ public class UsersActivity extends AppCompatActivity {
                 }
 
             });
+
         } else {
-            client.getFollowing(currentUser.getScreenName(), cursor, new JsonHttpResponseHandler() {
+            client.getFollowers(currentUser.getScreenName(), cursor, new JsonHttpResponseHandler() {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -170,12 +173,12 @@ public class UsersActivity extends AppCompatActivity {
     public void refresh(Boolean loading) {
 
         if (loading) {
-            populateUsers(null);
-        } else {
             if (currentCursor.contentEquals("0")) {
                 return;
             }
             populateUsers(currentCursor);
+        } else {
+            populateUsers(null);
         }
 
     }
@@ -185,6 +188,20 @@ public class UsersActivity extends AppCompatActivity {
         pd.setTitle("Loading...");
         pd.setMessage("Please wait.");
         pd.setCancelable(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 
 }

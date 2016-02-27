@@ -1,15 +1,18 @@
 package com.codepath.apps.tweeton.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.tweeton.Activities.UsersActivity;
 import com.codepath.apps.tweeton.R;
 import com.codepath.apps.tweeton.TwitterApplication;
 import com.codepath.apps.tweeton.TwitterClient;
@@ -37,12 +40,15 @@ public class UserProfileFragment extends Fragment{
     TextView userName;
     @Bind(R.id.tvDetailScreenName)
     TextView screenName;
-    @Bind(R.id.tvFollowers)
-    TextView followers;
-    @Bind(R.id.tvFollowing)
-    TextView following;
+    @Bind(R.id.btnFollowers)
+    Button followers;
+    @Bind(R.id.btnFollowing)
+    Button following;
     @Bind(R.id.tvTagline)
     TextView tagline;
+
+    static final String USER_SCREENAME_EXTRA = "userScreenName";
+    static final String IS_FOLLOWING_EXTRA = "isFollowing";
 
     public static UserProfileFragment newInstance(String screenName) {
         UserProfileFragment profileFramgemt = new UserProfileFragment();
@@ -58,6 +64,26 @@ public class UserProfileFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
         ButterKnife.bind(this, v);
         getUserInfo();
+
+        followers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), UsersActivity.class);
+                i.putExtra(USER_SCREENAME_EXTRA, user.getScreenName());
+                i.putExtra(IS_FOLLOWING_EXTRA, false);
+                startActivity(i);
+            }
+        });
+
+        following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), UsersActivity.class);
+                i.putExtra(USER_SCREENAME_EXTRA, user.getScreenName());
+                i.putExtra(IS_FOLLOWING_EXTRA, true);
+                startActivity(i);
+            }
+        });
 
         return v;
     }
@@ -88,5 +114,6 @@ public class UserProfileFragment extends Fragment{
         followers.setText(Integer.toString(user.getFollowersCount()) + " followers");
         tagline.setText(user.getTagline());
     }
+
 
 }

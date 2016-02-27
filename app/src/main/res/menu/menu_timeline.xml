@@ -3,9 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/miSearch"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search_title"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always"
+        android:orderInCategory="70"></item>
+
+    <item
         android:id="@+id/miProfile"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@drawable/ic_profile"
         android:title="Profile"
+        android:orderInCategory="80"
         android:onClick="onProfileView"></item>
+
 </menu>

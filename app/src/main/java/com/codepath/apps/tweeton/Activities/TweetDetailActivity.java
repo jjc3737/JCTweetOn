@@ -18,9 +18,15 @@ import android.widget.VideoView;
 import com.bumptech.glide.Glide;
 import com.codepath.apps.tweeton.Fragments.ComposeTweetFragment;
 import com.codepath.apps.tweeton.R;
+import com.codepath.apps.tweeton.TwitterApplication;
+import com.codepath.apps.tweeton.TwitterClient;
 import com.codepath.apps.tweeton.Utils;
 import com.codepath.apps.tweeton.models.Tweet;
 import com.codepath.apps.tweeton.models.User;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,6 +52,10 @@ public class TweetDetailActivity extends AppCompatActivity implements ComposeTwe
     View divider;
     @Bind(R.id.vvVideoMedia)
     VideoView video;
+    @Bind(R.id.btnFavorite)
+    ImageButton favorite;
+
+    TwitterClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +66,14 @@ public class TweetDetailActivity extends AppCompatActivity implements ComposeTwe
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        client = TwitterApplication.getRestClient();
 
         ButterKnife.bind(this);
+        setUpViews();
 
+    }
+
+    public void setUpViews() {
         Intent intent = getIntent();
         String id = intent.getStringExtra("tweet");
         if (id == null || id.isEmpty()) {
@@ -72,6 +87,12 @@ public class TweetDetailActivity extends AppCompatActivity implements ComposeTwe
         userName.setText(user.getName());
         screenName.setText("@" + user.getScreenName());
         tweet.setText(mTweet.getBody());
+        if (mTweet.getFavorited()) {
+            favorite.setImageResource(R.drawable.favorited);
+        } else {
+            favorite.setImageResource(R.drawable.not_favorited);
+        }
+
 
         String mediaUrl = mTweet.getMediaURL();
         if (mediaUrl == null || mediaUrl.isEmpty()) {
@@ -108,6 +129,53 @@ public class TweetDetailActivity extends AppCompatActivity implements ComposeTwe
             }
         });
 
+        favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeFavorited();
+            }
+        });
+
+
+    }
+
+    public void changeFavorited() {
+        if (mTweet.getFavorited()) {
+            //First change UI
+            favorite.setImageResource(R.drawable.not_favorited);
+            client.destroyFavorite(mTweet.getUid(), new JsonHttpResponseHandler() {
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    Tweet.setFavorited(mTweet.getUid(), false);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    favorite.setImageResource(R.drawable.favorited);
+                    Toast.makeText(TweetDetailActivity.this, "Error: Please try again later", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            favorite.setImageResource(R.drawable.favorited);
+
+            client.postFavoriate(mTweet.getUid(), new JsonHttpResponseHandler() {
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    Tweet.setFavorited(mTweet.getUid(), true);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    favorite.setImageResource(R.drawable.not_favorited);
+                    Toast.makeText(TweetDetailActivity.this, "Error: Please try again later", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+            });
+
+        }
     }
 
     @Override

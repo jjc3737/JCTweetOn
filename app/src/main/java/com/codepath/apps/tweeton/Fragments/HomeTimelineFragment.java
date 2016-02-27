@@ -40,20 +40,24 @@ public class HomeTimelineFragment extends TweetsListFragment {
             Toast.makeText(getActivity(), "Offline Mode", Toast.LENGTH_SHORT).show();
             return;
         }
+        pd.show();
         //Clear out tweets if needed
         client.getTimeline(id, new JsonHttpResponseHandler() {
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 new Delete().from(Tweet.class).execute();
                 addAll(Tweet.fromJSONArray(response));
                 maxID = getIdOfLastTweet();
                 stopRefreshing();
+                pd.dismiss();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Utils.showToastForException(getActivity());
                 stopRefreshing();
+                pd.dismiss();
             }
 
         });

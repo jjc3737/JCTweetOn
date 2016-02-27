@@ -29,6 +29,7 @@ public class MentionsTimelineFragment extends TweetsListFragment {
         populateTimeline(null);
     }
 
+
     public void populateTimeline(String id) {
 
         if (Utils.isNetworkAvailable(getActivity()) == false ) {
@@ -40,18 +41,22 @@ public class MentionsTimelineFragment extends TweetsListFragment {
             return;
         }
         //Clear out tweets if needed
+        pd.show();
         client.getMentionsTimeline(id, new JsonHttpResponseHandler() {
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 addAll(Tweet.fromJSONArray(response));
                 maxID = getIdOfLastTweet();
                 stopRefreshing();
+                pd.dismiss();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Utils.showToastForException(getActivity());
                 stopRefreshing();
+                pd.dismiss();
             }
 
         });

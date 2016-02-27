@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.support.v7.widget.SearchView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.tweeton.Fragments.ComposeTweetFragment;
@@ -33,6 +35,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
     PagerSlidingTabStrip tabs;
 
     HomeTimelineFragment homeFragment;
+
+    static final String QUERY_EXTRA = "query";
 
 
     @Override
@@ -66,6 +70,23 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_timeline, menu);
         //do something with item
+        MenuItem searchItem = menu.findItem(R.id.miSearch);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                Intent i = new Intent(TimelineActivity.this, SearchActivity.class);
+                i.putExtra(QUERY_EXTRA, query);
+                startActivity(i);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         return true;
     }

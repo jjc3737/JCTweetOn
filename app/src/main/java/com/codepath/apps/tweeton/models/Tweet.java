@@ -67,7 +67,7 @@ public class Tweet extends Model {
     }
 
     //Deserialize JSON
-    public static Tweet fromJSON(JSONObject jsonObject) {
+    public static Tweet fromJSON(JSONObject jsonObject, Boolean save) {
         Tweet tweet = new Tweet();
         try {
             tweet.body = jsonObject.getString("text");
@@ -98,13 +98,17 @@ public class Tweet extends Model {
                 }
             }
 
+            if (save) {
+                tweet.save();
+            }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
 
         }
 
-        tweet.save();
+
         return tweet;
     }
 
@@ -114,7 +118,26 @@ public class Tweet extends Model {
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
                 JSONObject tweetJson = jsonArray.getJSONObject(i);
-                Tweet tweet = fromJSON(tweetJson);
+                Tweet tweet = fromJSON(tweetJson, true);
+                if (tweet != null) {
+                    tweets.add(tweet);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+
+        return tweets;
+    }
+
+    public static ArrayList<Tweet> fromJSONArrayNotSaved(JSONArray jsonArray) {
+        ArrayList<Tweet> tweets = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject tweetJson = jsonArray.getJSONObject(i);
+                Tweet tweet = fromJSON(tweetJson, false);
                 if (tweet != null) {
                     tweets.add(tweet);
                 }

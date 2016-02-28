@@ -1,5 +1,6 @@
 package com.codepath.apps.tweeton.Fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -28,6 +30,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
 
         client = TwitterApplication.getRestClient();
+        getCurrentUserScreenName();
         populateTimeline(null);
     }
 
@@ -60,6 +63,24 @@ public class HomeTimelineFragment extends TweetsListFragment {
                 pd.dismiss();
             }
 
+        });
+    }
+
+    public void getCurrentUserScreenName() {
+
+        client.getUserInfo(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    String s = response.getString("screen_name");
+                    SharedPreferences.Editor et = sharedPreferences.edit();
+                    et.putString(currentUserScreenName, s);
+                    et.apply();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         });
     }
 

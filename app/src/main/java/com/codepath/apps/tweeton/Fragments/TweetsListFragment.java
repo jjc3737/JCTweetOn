@@ -1,6 +1,8 @@
 package com.codepath.apps.tweeton.Fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -38,6 +40,11 @@ public class TweetsListFragment extends Fragment {
 
     LinearLayoutManager layoutManager;
     ProgressDialog pd;
+
+    public static SharedPreferences sharedPreferences;
+    public static final String prefName = "MY_SHARED_PREFS";
+    public static final String currentUserScreenName = "CURRENT_USER_SCREEN_NAME";
+
     //inflation logic
 
     @Nullable
@@ -46,6 +53,8 @@ public class TweetsListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_tweet_list, container, false);
         ButterKnife.bind(this, v);
         setUpViews();
+        sharedPreferences = getActivity()
+                .getApplicationContext().getSharedPreferences(prefName, Context.MODE_PRIVATE);
 
         return v;
     }
@@ -125,5 +134,11 @@ public class TweetsListFragment extends Fragment {
         pd.setTitle("Loading...");
         pd.setMessage("Please wait.");
         pd.setCancelable(false);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }

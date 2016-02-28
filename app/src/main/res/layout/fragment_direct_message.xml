@@ -2,13 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvRecipient"
+        android:text="To: ScreenName"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
+
     <EditText
-        android:id="@+id/etTweet"
+        android:id="@+id/etDirectMessage"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_below="@id/tvRecipient"
         android:layout_weight="1"
         android:gravity="top"
-        android:hint="@string/tweet_hint"
+        android:hint="@string/directMessage_hint"
         android:maxLength="140"
         android:minHeight="60dp"
         android:singleLine="false"
@@ -21,23 +32,15 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnTweet"
-        android:text="@string/tweetButton"
+        android:id="@+id/btnSendMessage"
+        android:text="@string/sendDM"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_below="@+id/etTweet"
+        android:layout_below="@+id/etDirectMessage"
         android:textColor="#fff"
         android:background="@color/colorPrimaryDark"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvTweetCount"
-        android:text="140"
-        android:layout_below="@+id/etTweet"
-        android:layout_toLeftOf="@+id/btnTweet"
-        android:layout_marginTop="12dp"/>
+
 </RelativeLayout>

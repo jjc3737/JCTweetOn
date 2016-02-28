@@ -14,6 +14,8 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by JaneChung on 2/20/16.
  */
@@ -29,13 +31,16 @@ public class MentionsTimelineFragment extends TweetsListFragment {
         populateTimeline(null);
     }
 
-
     public void populateTimeline(String id) {
 
         if (Utils.isNetworkAvailable(getActivity()) == false ) {
             if (id == null) {
-                //Todo: Can't get all tweets here, must get only metnions
-                addAll(Tweet.getAllTweets());
+                ArrayList<Tweet> t = getMentionTweets();
+                if (t == null) {
+                    Toast.makeText(getActivity(), "Error in saving tweets", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                addAll(t);
             }
             Toast.makeText(getActivity(), "Offline Mode", Toast.LENGTH_SHORT).show();
             return;
@@ -60,6 +65,15 @@ public class MentionsTimelineFragment extends TweetsListFragment {
             }
 
         });
+    }
+
+    public ArrayList<Tweet> getMentionTweets() {
+        ArrayList<Tweet> tweets = new ArrayList<>();
+        String s = sharedPreferences.getString(currentUserScreenName, "");
+        if (s.contentEquals("")) {
+            return null;
+        }
+        return Tweet.getMentionTweets(s);
     }
 
     @Override

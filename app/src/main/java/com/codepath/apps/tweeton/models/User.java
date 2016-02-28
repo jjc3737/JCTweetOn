@@ -1,5 +1,7 @@
 package com.codepath.apps.tweeton.models;
 
+import android.os.AsyncTask;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -33,6 +35,8 @@ public class User extends Model {
     private int followingCount;
     @Column(name = "FollwersCount")
     private int followersCount;
+    @Column(name = "BackgrgoundUrl")
+    private String backgroundUrl;
 
     public String getName() {
         return name;
@@ -60,6 +64,10 @@ public class User extends Model {
 
     public String getTagline() {
         return tagline;
+    }
+
+    public String getBackgroundUrl() {
+        return backgroundUrl;
     }
 
     public User() {
@@ -96,11 +104,12 @@ public class User extends Model {
             user.tagline = json.getString("description");
             user.followersCount = json.getInt("followers_count");
             user.followingCount = json.getInt("friends_count");
+            user.backgroundUrl = json.getString("profile_background_image_url");
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        user.save();
+        new UserAsyncTask().execute(user);
         return user;
     }
 
@@ -127,30 +136,26 @@ public class User extends Model {
 
     }
 
-    public static ArrayList<User> getFollowersOfUser(User user) {
-        ArrayList<User> users = new ArrayList<>();
-        //Todo
-        return users;
-    }
-
-    public static ArrayList<User> getFollowingOfUser(User user) {
-        ArrayList<User> users = new ArrayList<>();
-        //Todo
-        return users;
-    }
-
-    public static User getCurrentUser() {
-        return new Select()
-                .from(User.class)
-                .where("current_user = 1")
-                .executeSingle();
-    }
-
     public static User getUserFromScreenName(String screenName) {
         return new Select()
                 .from(User.class)
                 .where("ScreenName = ?", screenName)
                 .executeSingle();
+    }
+
+    public static class UserAsyncTask extends AsyncTask<User, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(User... params) {
+
+            User user = params[0];
+            user.save();
+            return null;
+        }
     }
 
 }

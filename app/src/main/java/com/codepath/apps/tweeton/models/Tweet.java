@@ -1,5 +1,7 @@
 package com.codepath.apps.tweeton.models;
 
+import android.os.AsyncTask;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -98,16 +100,13 @@ public class Tweet extends Model {
                 }
             }
 
-            if (save) {
-                tweet.save();
-            }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
 
         }
-
+        if (save) {
+            new TweetAsyncTask().execute(tweet);
+        }
 
         return tweet;
     }
@@ -153,13 +152,37 @@ public class Tweet extends Model {
     public static ArrayList<Tweet> getAllTweets() {
         ArrayList<Tweet> tweets = new ArrayList<>();
         List<Tweet> list = new Select()
-                .from(Tweet.class).orderBy("remote_id ASC")
+                .from(Tweet.class).orderBy("Created_At ASC")
                 .execute();
 
         tweets.addAll(list);
         return tweets;
     }
 
+    public static ArrayList<Tweet> getMentionTweets(String screenName) {
+        ArrayList<Tweet> tweets = new ArrayList<>();
+        List<Tweet> list = new Select()
+                .from(Tweet.class)
+                .where("Body LIKE ?", new String[]{'%' + screenName + '%'})
+                .orderBy("remote_id ASC")
+                .execute();
+
+        tweets.addAll(list);
+        return tweets;
+    }
+
+    public static ArrayList<Tweet> getUserTweets(String screenName) {
+        User user = User.getUserFromScreenName(screenName);
+        ArrayList<Tweet> tweets = new ArrayList<>();
+        List<Tweet> list = new Select()
+                .from(Tweet.class)
+                .where("User = ?", user.getId())
+                .orderBy("remote_id ASC")
+                .execute();
+
+        tweets.addAll(list);
+        return tweets;
+    }
 
     public static Tweet getTweetFromId(String tweetID) {
         return new Select()
@@ -175,4 +198,18 @@ public class Tweet extends Model {
         tweet.save();
     }
 
+    public static class TweetAsyncTask extends AsyncTask<Tweet, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Tweet... params) {
+
+            Tweet tweet = params[0];
+            tweet.save();
+            return null;
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package com.codepath.apps.tweeton.models;
 
+import android.os.AsyncTask;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -103,7 +105,7 @@ public class Tweet extends Model {
 
         }
         if (save) {
-            tweet.save();
+            new TweetAsyncTask().execute(tweet);
         }
 
         return tweet;
@@ -172,4 +174,18 @@ public class Tweet extends Model {
         tweet.save();
     }
 
+    public static class TweetAsyncTask extends AsyncTask<Tweet, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Tweet... params) {
+
+            Tweet tweet = params[0];
+            tweet.save();
+            return null;
+        }
+    }
 }

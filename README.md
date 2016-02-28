@@ -2,7 +2,7 @@
 
 **TweetOn** is an android app that allows a user to view his Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
 
-Time spent: 43 hours spent in total
+Time spent: 50 hours spent in total
 
 ## User Stories
 
@@ -17,7 +17,7 @@ The following **required** functionality is completed:
 * [X] User can **click on the profile image** in any tweet to see **another user's** profile.
  * [X] User can see picture, tagline, # of followers, # of following, and tweets of clicked user.
  * [X] Profile view includes that user's timeline
-* X] User can [infinitely paginate](http://guides.codepath.com/android/Endless-Scrolling-with-AdapterViews-and-RecyclerView) any of these timelines (home, mentions, user) by scrolling to the bottom
+* [X] User can [infinitely paginate](http://guides.codepath.com/android/Endless-Scrolling-with-AdapterViews-and-RecyclerView) any of these timelines (home, mentions, user) by scrolling to the bottom
 
 The following **optional** features are implemented:
 
@@ -36,12 +36,14 @@ The following **bonus** features are implemented:
 * [X] Use Parcelable instead of Serializable using the popular [Parceler library](http://guides.codepath.com/android/Using-Parceler).
 * [X] Apply the popular [Butterknife annotation library](http://guides.codepath.com/android/Reducing-View-Boilerplate-with-Butterknife) to reduce view boilerplate.
 * [X] Leverage the popular [GSON library](http://guides.codepath.com/android/Using-Android-Async-Http-Client#decoding-with-gson-library) to streamline the parsing of JSON data.
-* [ ] User can view their direct messages (or send new ones)
+* [X] User can view their direct messages (or send new ones)
 
 
 The following **additional** features are implemented:
 
 * [X] Used persisted tweets instead of parceler and passing objects 
+* [X] Used async tasks to save tweet and user objects
+* [X] All types of tweets (from users page, mentions, timeline) are shown offline
 
 ## Video Walkthrough 
 

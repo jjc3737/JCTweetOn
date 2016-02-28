@@ -176,7 +176,7 @@ public class Tweet extends Model {
         ArrayList<Tweet> tweets = new ArrayList<>();
         List<Tweet> list = new Select()
                 .from(Tweet.class)
-                .where("User = ?", user)
+                .where("User = ?", user.getId())
                 .orderBy("remote_id ASC")
                 .execute();
 

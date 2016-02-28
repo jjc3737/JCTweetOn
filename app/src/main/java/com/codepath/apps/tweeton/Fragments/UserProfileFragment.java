@@ -1,6 +1,9 @@
 package com.codepath.apps.tweeton.Fragments;
 
+import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,9 +50,14 @@ public class UserProfileFragment extends Fragment{
     Button following;
     @Bind(R.id.tvTagline)
     TextView tagline;
+    @Bind(R.id.btnDirectMessage)
+    ImageButton directMessage;
 
     static final String USER_SCREENAME_EXTRA = "userScreenName";
     static final String IS_FOLLOWING_EXTRA = "isFollowing";
+    public static SharedPreferences sharedPreferences;
+    public static final String prefName = "MY_SHARED_PREFS";
+    private static final String currentUserScreenName = "CURRENT_USER_SCREEN_NAME";
 
     public static UserProfileFragment newInstance(String screenName) {
         UserProfileFragment profileFramgemt = new UserProfileFragment();
@@ -63,6 +72,9 @@ public class UserProfileFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
         ButterKnife.bind(this, v);
+        client = TwitterApplication.getRestClient();
+        sharedPreferences = getActivity()
+                .getApplicationContext().getSharedPreferences(prefName, Context.MODE_PRIVATE);
         getUserInfo();
 
         followers.setOnClickListener(new View.OnClickListener() {
@@ -85,23 +97,38 @@ public class UserProfileFragment extends Fragment{
             }
         });
 
+        directMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment fragment = ComposeDirectMessage.getInstance(user.getScreenName());
+                fragment.show(getActivity().getFragmentManager(), "Compose Direct Message");
+            }
+        });
+
         return v;
     }
 
     public void getUserInfo() {
-        client = TwitterApplication.getRestClient();
         String screenName = getArguments().getString("screen_name");
+        final String currentUserScreenNameFromShared = sharedPreferences
+                .getString(currentUserScreenName, "");
 
         client.getUserProfile(screenName, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 user = User.findOrCreate(response);
                 populateProfileHeader(user);
+                if (currentUserScreenNameFromShared.contentEquals(user.getScreenName())) {
+                    directMessage.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Utils.showToastForException(getActivity());
+                following.setEnabled(false);
+                followers.setEnabled(false);
+                directMessage.setEnabled(false);
             }
         });
     }

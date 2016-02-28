@@ -126,4 +126,10 @@ public class TweetsListFragment extends Fragment {
         pd.setMessage("Please wait.");
         pd.setCancelable(false);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
 }

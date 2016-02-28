@@ -6,10 +6,12 @@
     <string name="title_activity_timeline">Home Timeline</string>
     <string name="title_activity_test">test</string>
     <string name="tweet_hint">What\'s happening?</string>
+    <string name="directMessage_hint">Direct message...</string>
     <string name="tweetButton">Tweet</string>
     <string name="home">Home</string>
     <string name="connect">Connect</string>
     <string name="title_activity_tweet_detail">TweetDetailActivity</string>
+    <string name="sendDM">Send</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

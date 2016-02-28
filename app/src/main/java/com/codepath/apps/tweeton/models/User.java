@@ -62,6 +62,7 @@ public class User extends Model {
         return tagline;
     }
 
+
     public User() {
         super();
     }
@@ -138,14 +139,6 @@ public class User extends Model {
         //Todo
         return users;
     }
-
-    public static User getCurrentUser() {
-        return new Select()
-                .from(User.class)
-                .where("current_user = 1")
-                .executeSingle();
-    }
-
     public static User getUserFromScreenName(String screenName) {
         return new Select()
                 .from(User.class)

@@ -1,5 +1,7 @@
 package com.codepath.apps.tweeton.Fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
@@ -13,6 +15,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -23,11 +26,17 @@ public class HomeTimelineFragment extends TweetsListFragment {
     private TwitterClient client;
     private String maxID;
 
+    public static SharedPreferences sharedPreferences;
+    public static final String prefName = "MY_SHARED_PREFS";
+    private static final String currentUserScreenName = "CURRENT_USER_SCREEN_NAME";
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         client = TwitterApplication.getRestClient();
+        sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(prefName, Context.MODE_PRIVATE);
+        getCurrentUserScreenName();
         populateTimeline(null);
     }
 
@@ -60,6 +69,24 @@ public class HomeTimelineFragment extends TweetsListFragment {
                 pd.dismiss();
             }
 
+        });
+    }
+
+    public void getCurrentUserScreenName() {
+
+        client.getUserInfo(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    String s = response.getString("screen_name");
+                    SharedPreferences.Editor et = sharedPreferences.edit();
+                    et.putString(currentUserScreenName, s);
+                    et.apply();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         });
     }
 

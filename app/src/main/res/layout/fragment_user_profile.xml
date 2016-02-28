@@ -57,15 +57,29 @@
             android:layout_height="wrap_content"
             android:id="@+id/btnFollowers"
             style="?android:attr/borderlessButtonStyle"
+            android:text="Text"
             android:textAllCaps="false"
             />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/btnFollowing"
             style="?android:attr/borderlessButtonStyle"
+            android:text="Test followers"
             android:textAllCaps="false"
+            />
+        <ImageButton
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/btnDirectMessage"
+            android:paddingTop="2dp"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:baselineAlignBottom="true"
+            android:layout_marginLeft="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/direct_message"
             />
     </LinearLayout>
 

@@ -98,16 +98,13 @@ public class Tweet extends Model {
                 }
             }
 
-            if (save) {
-                tweet.save();
-            }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
 
         }
-
+        if (save) {
+            tweet.save();
+        }
 
         return tweet;
     }

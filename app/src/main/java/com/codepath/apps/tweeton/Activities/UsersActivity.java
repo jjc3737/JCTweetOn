@@ -112,14 +112,8 @@ public class UsersActivity extends AppCompatActivity {
 
     public void populateUsers(String cursor) {
         if (Utils.isNetworkAvailable(this) == false ) {
-            if (cursor == null) {
-                if (showFollowing) {
-                    adapter.addAll(User.getFollowingOfUser(currentUser));
-                } else {
-                    adapter.addAll(User.getFollowersOfUser(currentUser));
-                }
-            }
-            Toast.makeText(this, "Offline Mode", Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(this, "Offline Mode: Can't get data", Toast.LENGTH_SHORT).show();
             return;
         }
         pd.show();

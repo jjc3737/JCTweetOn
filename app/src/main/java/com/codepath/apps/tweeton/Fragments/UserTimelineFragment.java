@@ -50,7 +50,6 @@ public class UserTimelineFragment extends TweetsListFragment {
                     Toast.makeText(getActivity(), "Error in saving Tweets", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                //Todo: Can't get all tweets here, must get only users
                 addAll(t);
             }
             Toast.makeText(getActivity(), "Offline Mode", Toast.LENGTH_SHORT).show();

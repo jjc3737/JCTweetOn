@@ -1,29 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#fff">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:id="@+id/rlHeader"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
         <ImageView
+            android:id="@+id/ivBackgroundPic"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:adjustViewBounds="true"
+            android:background="@color/colorPrimaryDark"
+            android:scaleType="centerCrop" />
+
+        <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="160dp"
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
             android:id="@+id/ivUserProfilePic"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvDetailUserName"
-            android:layout_toRightOf="@+id/ivUserProfilePic"
+            android:layout_below="@+id/ivUserProfilePic"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
             android:text="TestName"/>
 
         <TextView
@@ -34,14 +44,15 @@
             android:layout_marginLeft="10dp"
             android:text="Test"
             android:textColor="@color/colorPrimary"
-            android:layout_marginTop="15dp"/>
+            android:layout_alignBottom="@+id/tvDetailUserName"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvTagline"
-            android:layout_below="@+id/ivUserProfilePic"
-            android:layout_marginTop="10dp"/>
+            android:layout_below="@+id/tvDetailScreenName"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"/>
 
     </RelativeLayout>
 

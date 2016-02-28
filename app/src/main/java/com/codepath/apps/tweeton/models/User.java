@@ -35,6 +35,8 @@ public class User extends Model {
     private int followingCount;
     @Column(name = "FollwersCount")
     private int followersCount;
+    @Column(name = "BackgrgoundUrl")
+    private String backgroundUrl;
 
     public String getName() {
         return name;
@@ -64,6 +66,9 @@ public class User extends Model {
         return tagline;
     }
 
+    public String getBackgroundUrl() {
+        return backgroundUrl;
+    }
 
     public User() {
         super();
@@ -99,6 +104,7 @@ public class User extends Model {
             user.tagline = json.getString("description");
             user.followersCount = json.getInt("followers_count");
             user.followingCount = json.getInt("friends_count");
+            user.backgroundUrl = json.getString("profile_background_image_url");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -130,17 +136,6 @@ public class User extends Model {
 
     }
 
-    public static ArrayList<User> getFollowersOfUser(User user) {
-        ArrayList<User> users = new ArrayList<>();
-        //Todo
-        return users;
-    }
-
-    public static ArrayList<User> getFollowingOfUser(User user) {
-        ArrayList<User> users = new ArrayList<>();
-        //Todo
-        return users;
-    }
     public static User getUserFromScreenName(String screenName) {
         return new Select()
                 .from(User.class)

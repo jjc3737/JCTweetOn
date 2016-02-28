@@ -38,6 +38,8 @@ public class UserProfileFragment extends Fragment{
     TwitterClient client;
     User user;
 
+    @Bind(R.id.ivBackgroundPic)
+    ImageView background;
     @Bind(R.id.ivUserProfilePic)
     ImageView profile;
     @Bind(R.id.tvDetailUserName)
@@ -135,8 +137,11 @@ public class UserProfileFragment extends Fragment{
 
     public void populateProfileHeader(User user) {
         Glide.with(this).load(user.getProfileImageUrl()).into(profile);
+        if (user.getBackgroundUrl() != null) {
+            Glide.with(this).load(user.getBackgroundUrl()).into(background);
+        }
         userName.setText(user.getName());
-        screenName.setText(user.getScreenName());
+        screenName.setText("@" + user.getScreenName());
         following.setText(Integer.toString(user.getFollowingCount()) + " following");
         followers.setText(Integer.toString(user.getFollowersCount()) + " followers");
         tagline.setText(user.getTagline());

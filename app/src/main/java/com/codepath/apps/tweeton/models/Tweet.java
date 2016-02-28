@@ -152,13 +152,37 @@ public class Tweet extends Model {
     public static ArrayList<Tweet> getAllTweets() {
         ArrayList<Tweet> tweets = new ArrayList<>();
         List<Tweet> list = new Select()
-                .from(Tweet.class).orderBy("remote_id ASC")
+                .from(Tweet.class).orderBy("Created_At ASC")
                 .execute();
 
         tweets.addAll(list);
         return tweets;
     }
 
+    public static ArrayList<Tweet> getMentionTweets(String screenName) {
+        ArrayList<Tweet> tweets = new ArrayList<>();
+        List<Tweet> list = new Select()
+                .from(Tweet.class)
+                .where("Body LIKE ?", new String[]{'%' + screenName + '%'})
+                .orderBy("remote_id ASC")
+                .execute();
+
+        tweets.addAll(list);
+        return tweets;
+    }
+
+    public static ArrayList<Tweet> getUserTweets(String screenName) {
+        User user = User.getUserFromScreenName(screenName);
+        ArrayList<Tweet> tweets = new ArrayList<>();
+        List<Tweet> list = new Select()
+                .from(Tweet.class)
+                .where("User = ?", user)
+                .orderBy("remote_id ASC")
+                .execute();
+
+        tweets.addAll(list);
+        return tweets;
+    }
 
     public static Tweet getTweetFromId(String tweetID) {
         return new Select()

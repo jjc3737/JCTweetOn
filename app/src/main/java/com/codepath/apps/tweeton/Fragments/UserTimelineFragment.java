@@ -14,6 +14,8 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by JaneChung on 2/20/16.
  */
@@ -39,17 +41,23 @@ public class UserTimelineFragment extends TweetsListFragment {
     }
 
     public void populateTimeline(String id) {
+        String screenName = getArguments().getString("screen_name");
 
         if (Utils.isNetworkAvailable(getActivity()) == false ) {
             if (id == null) {
+                ArrayList<Tweet> t = Tweet.getUserTweets(screenName);
+                if (t == null) {
+                    Toast.makeText(getActivity(), "Error in saving Tweets", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 //Todo: Can't get all tweets here, must get only users
-                addAll(Tweet.getAllTweets());
+                addAll(t);
             }
             Toast.makeText(getActivity(), "Offline Mode", Toast.LENGTH_SHORT).show();
             return;
         }
         //Clear out tweets if needed
-        String screenName = getArguments().getString("screen_name");
+
         client.getUserTimeline(screenName, id, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {

@@ -1,5 +1,7 @@
 package com.codepath.apps.tweeton.models;
 
+import android.os.AsyncTask;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -101,7 +103,7 @@ public class User extends Model {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        user.save();
+        new UserAsyncTask().execute(user);
         return user;
     }
 
@@ -144,6 +146,21 @@ public class User extends Model {
                 .from(User.class)
                 .where("ScreenName = ?", screenName)
                 .executeSingle();
+    }
+
+    public static class UserAsyncTask extends AsyncTask<User, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(User... params) {
+
+            User user = params[0];
+            user.save();
+            return null;
+        }
     }
 
 }
